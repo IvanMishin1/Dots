@@ -1,0 +1,41 @@
+import pygame
+
+def draw_grid(gd):
+    for i in range(gd.grid_size + 1):
+        p = int(gd.padding + i * gd.step)
+        pygame.draw.line(gd.screen, (0, 0, 0), (p, gd.padding), (p, gd.screen_size - gd.padding), width=1)
+        pygame.draw.line(gd.screen, (0, 0, 0), (gd.padding, p), (gd.screen_size - gd.padding, p), width=1)
+
+def draw_captured(gd):
+    for color_key, poly in gd.captured:
+        if len(poly) < 3:
+            continue
+        coords = [(gd.padding + c * gd.step, gd.padding + r * gd.step) for r, c in poly]
+
+        overlay = pygame.Surface(gd.screen.get_size(), pygame.SRCALPHA)
+        if color_key == "B":
+            color = (0, 0, 255)
+        else:
+            color = (255, 0, 0)
+
+        pygame.draw.polygon(overlay, color, coords)
+        overlay.set_alpha(128)
+        gd.screen.blit(overlay, (0, 0))
+
+def draw_points(gd):
+    for y in range(gd.grid_size +1):
+        for x in range(gd.grid_size +1):
+            if gd.grid[y][x] == "R":
+                pygame.draw.circle(gd.screen, gd.color_red, (gd.padding + x * gd.step, gd.padding + y * gd.step), 7)
+            elif gd.grid[y][x] == "r":
+                pygame.draw.circle(gd.screen, gd.color_red, (gd.padding + x * gd.step, gd.padding + y * gd.step), 7)
+            elif gd.grid[y][x] == "B":
+                pygame.draw.circle(gd.screen, gd.color_blue, (gd.padding + x * gd.step, gd.padding + y * gd.step), 7)
+            elif gd.grid[y][x] == "b":
+                pygame.draw.circle(gd.screen, gd.color_blue, (gd.padding + x * gd.step, gd.padding + y * gd.step), 7)
+
+def draw_score(gd):
+    text_surface = gd.font.render(str(gd.score["B"]), True, gd.color_blue)
+    gd.screen.blit(text_surface, text_surface.get_rect(center=(gd.screen_size/2 - gd.screen_size/6, gd.padding/2)))
+    text_surface = gd.font.render(str(gd.score["R"]), True, gd.color_red)
+    gd.screen.blit(text_surface, text_surface.get_rect(center=(gd.screen_size/2 + gd.screen_size/6, gd.padding/2)))
