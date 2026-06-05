@@ -4,37 +4,35 @@ from dataclasses import dataclass
 
 pygame.init()
 
-@dataclass
 class GameData:
-    blueTurn: bool = True
-    screen_size: int = 512
-    grid_size: int = 20
-    padding: int = 70
-    step = (screen_size - 2 * padding) / grid_size
-    color_blue = (0,0,255)
-    color_red = (255,0,0)
-    score= {
-        'B': 0,
-        'R': 0,
-    }
-    grid = []
-    screen = pygame.display.set_mode((screen_size, screen_size))
-    font = pygame.font.Font(pygame.font.get_default_font(), 40)
-    captured = []
-    last_move = None
+    def __init__(self):
+        # Game config
+        self.blueTurn = True
+        self.screen_size = 512
+        self.grid_size = 20
+        self.padding = 70
+
+        # Derived values
+        self.step = (self.screen_size - 2 * self.padding) / self.grid_size
+
+        # Colors / UI
+        self.color_blue = (0, 0, 255)
+        self.color_red = (255, 0, 0)
+
+        # Game state
+        self.score = {'B': 0, 'R': 0}
+        self.grid = [[' ' for _ in range(self.grid_size + 1)] for _ in range(self.grid_size + 1)]
+        self.captured = []
+        self.last_move = None
+
+        self.screen = pygame.display.set_mode((self.screen_size, self.screen_size))
+        self.font = pygame.font.Font(pygame.font.get_default_font(), 40)
 
 gd = GameData()
-
-for _ in range(gd.grid_size + 1):
-    gd.grid.append([])
-    for _ in range(gd.grid_size + 1):
-        gd.grid[-1].append(" ")
-
 pygame.display.set_caption("Dots")
 clock = pygame.time.Clock()
 
 while True:
-    gd.screen.fill("white")
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -57,7 +55,11 @@ while True:
                     check_borders("B","R", gd)
                     gd.last_move = (gx,gy,gd.color_red)
                 gd.blueTurn = not gd.blueTurn
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_r:
+                gd = GameData()
 
+    gd.screen.fill("white")
     draw_grid(gd)
     draw_points(gd)
     draw_captured(gd)
