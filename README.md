@@ -1,0 +1,1 @@
+Dots aka Tochki (rus: Точки) or Kropki is a pen-and-paper game in which players seek to capture their opponents dots. This is a local version of the game made using the Pygame library.

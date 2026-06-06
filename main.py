@@ -1,6 +1,5 @@
 from draw import *
 from logic import *
-from dataclasses import dataclass
 
 pygame.init()
 
