@@ -1,17 +1,18 @@
 from copy import deepcopy
-
-
 from engine.logic import *
 
 class DotsGame:
-    def __init__(self, grid_size):
+    def __init__(self, grid_size, player_count):
         # Game config
-        self.blue_turn = True
-        self.GRID_SIZE = grid_size
+        self.player_count = player_count
+        self.player_turn = 0
+        self.grid_size = grid_size
 
         # Game state
-        self.score = {'B': 0, 'R': 0}
-        self.grid = [[' ' for _ in range(self.GRID_SIZE + 1)] for _ in range(self.GRID_SIZE + 1)]
+        self.player_letters = ["R","B","G","C","M","Y"]
+        self.score = {self.player_letters[n]: 0 for n in range(self.player_count)}
+        print(self.score)
+        self.grid = [[' ' for _ in range(self.grid_size + 1)] for _ in range(self.grid_size + 1)]
         self.captured_areas = []
         self.last_move = None
 
@@ -38,15 +39,21 @@ class DotsGame:
             print("Illegal Move", x,y)
             return self
 
-        if self.blue_turn:
-            self.grid[y][x] = "B"
-            self.last_move = (x, y, "B")
-            check_borders("B", "R", self)
-            check_borders("R", "B", self)
+        self.grid[y][x] = self.player_letters[self.player_turn]
+        self.last_move = (x, y, self.player_letters[self.player_turn])
+
+        # Regular captures
+        for i in range(self.player_count):
+            if i != self.player_turn:
+                check_borders(self.player_letters[self.player_turn], self.player_letters[i], self)
+
+        # Auto-captures
+        for i in range(self.player_count):
+            if i != self.player_turn:
+                check_borders(self.player_letters[i], self.player_letters[self.player_turn], self)
+
+        if self.player_turn == self.player_count - 1 :
+            self.player_turn = 0
         else:
-            self.grid[y][x] = "R"
-            self.last_move = (x, y, "R")
-            check_borders("R", "B", self)
-            check_borders("B", "R", self)
-        self.blue_turn = not self.blue_turn
+            self.player_turn += 1
         return self

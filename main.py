@@ -2,7 +2,9 @@ from draw import *
 from engine.DotsGame import DotsGame
 pygame.init()
 
-GRID_SIZE = 20
+GRID_SIZE = 100
+PLAYER_COUNT = 6
+
 
 class LocalSettings:
     def __init__(self, grid_size):
@@ -14,13 +16,12 @@ class LocalSettings:
         self.step = (self.screen_size - 2 * self.padding) / grid_size
 
         # Colors / UI
-        self.color_blue = (0, 0, 255)
-        self.color_red = (255, 0, 0)
+        self.colors = [(255, 0, 0),(0, 0, 255),(50, 168, 82),(0, 255, 255),(255, 0, 255),(255, 255, 0)]
 
         self.screen = pygame.display.set_mode((self.screen_size, self.screen_size))
         self.font = pygame.font.Font(pygame.font.get_default_font(), 40)
 
-state = DotsGame(GRID_SIZE)
+state = DotsGame(GRID_SIZE, PLAYER_COUNT)
 local = LocalSettings(GRID_SIZE)
 pygame.display.set_caption("Dots")
 clock = pygame.time.Clock()
