@@ -11,7 +11,6 @@ class DotsGame:
         # Game state
         self.player_letters = ["R","B","G","C","M","Y"]
         self.score = {self.player_letters[n]: 0 for n in range(self.player_count)}
-        print(self.score)
         self.grid = [[' ' for _ in range(self.grid_size + 1)] for _ in range(self.grid_size + 1)]
         self.captured_areas = []
         self.last_move = None

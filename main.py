@@ -42,7 +42,7 @@ while True:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_r:
-                state = DotsGame(GRID_SIZE)
+                state = DotsGame(GRID_SIZE, PLAYER_COUNT)
 
     local.screen.fill("white")
     draw_grid(state, local)
